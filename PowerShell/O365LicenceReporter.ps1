@@ -1,4 +1,4 @@
-$Path = "C:\O365Reporting\Reports"
+$Path = "C:\O365Reporting\GiannisReports"
 
 
 try{
@@ -12,10 +12,12 @@ $PartConts = Get-MsolPartnerContract
 
 Foreach ($Partner in $PartConts){
     $EndHTML = ""
-    $tid = $Partner.tenantid
     $partname = $Partner.Name
+
     $filepath = $Path + $partname + "_License_Report.html"
+
     
+    $tid = $Partner.tenantid
     $LiceSubs = Get-MsolAccountSku -TenantId $tid
     $prodlist = Import-Csv .\ProductReference.csv
     $NiceTotal = @()
