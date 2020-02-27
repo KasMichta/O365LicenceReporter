@@ -1,1 +1,1 @@
-"# O365 Licence Reporter README" 
+# O365 Licence Reporter README
