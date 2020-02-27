@@ -1,4 +1,4 @@
-$Path = "C:\O365Reports\"
+$Path = "C:\O365Reporting\Reports"
 
 
 try{
