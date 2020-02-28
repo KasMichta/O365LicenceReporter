@@ -1,5 +1,20 @@
-$Path = "C:\O365Reporting\Reports"
-
+$Path = "C:\O365Reports\"
+$Header = @"
+<style>
+table {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+width: 100%;
+}
+th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: left;
+background-color: #4CAF50;
+color: white;
+}
+</style>
+"@
 
 try{
     Import-Module MSOnline
@@ -35,11 +50,11 @@ Foreach ($Partner in $PartConts){
         }
     }
 
-    $EndHTML += $NiceTotal| Select-Object Product, UnitsTotal, UnitsConsumed | convertto-html -PreContent "<h1> Total Count </h1>" -Fragment
+    $EndHTML += $NiceTotal| Select-Object Product, UnitsTotal, UnitsConsumed | convertto-html -PreContent "<h1> Total Count </h1>" -Head $Header
     
 
     Foreach ($product in $Nicetotal){
-        $EndHTML += $Product.Users | ConvertTo-Html -Fragment -PreContent "<h2>$($product.product) - Users:</h2>" 
+        $EndHTML += $Product.Users | ConvertTo-Html -PreContent "<h2>$($product.product) - Users:</h2>" -Head $Header
 
     }
 
