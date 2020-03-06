@@ -18,7 +18,7 @@ $PartConts = Get-MsolPartnerContract
 $coloi = 0
 
 Foreach ($Partner in $PartConts) {
-    Write-Host ""
+    
     # Check if color is on last item ? Reset : Ignore
     If ($coloi -eq 4) {
         $coloi = 0
@@ -34,7 +34,7 @@ Foreach ($Partner in $PartConts) {
 
     $LiceSubs = Get-MsolAccountSku -TenantId $tid
     $NiceTotal = @()
-    Write-Host "Gathering licence information for: " -NoNewline
+    Write-Host "Gathering licence information for" -NoNewline
     Write-Host "$partname" -ForegroundColor $OrgCol
     
     $coltoggle = $false
@@ -47,27 +47,23 @@ Foreach ($Partner in $PartConts) {
         else {
             $licecol = "DarkGray"
         }
-        
-        function OrgPrefix ($orgname, $productname) {
-            Write-Host "$($orgname): " -ForegroundColor $OrgCol -NoNewline
-            Write-Host "$($productname.'Product name'): " -ForegroundColor $licecol -NoNewline
-        }
 
         $prodref = $licesub.SkuId
         $ProdNiceName = $prodlist | ? { $prodref -contains $_.GUID }
 
         If ($ProdNiceName) {
-            OrgPrefix -orgname $partname -productname $ProdNiceName
+            Write-Host "$($partname): " -ForegroundColor $OrgCol -NoNewline
+            Write-Host "$($ProdNiceName.'Product name'): " -ForegroundColor $licecol -NoNewline
             Write-Host "Found Licence" -ForegroundColor Green
             $LiceUsers = Get-Msoluser -tenantid $tid | Where-Object { ($_.licenses).AccountSkuID -match ($ProdNiceName).'String ID' } | Select-Object DisplayName, UserPrincipalName
-            OrgPrefix -orgname $partname -productname $ProdNiceName
+            Write-Host "$($partname): " -ForegroundColor $OrgCol -NoNewline
+            Write-Host "$($ProdNiceName.'Product name'): " -ForegroundColor $licecol -NoNewline
             Write-Host "Found $(($LiceUsers | Measure-Object).Count) Users" -ForegroundColor Yellow
             $AvaiLice = $licesub.ActiveUnits - $licesub.ConsumedUnits
             If ($AvaiLice -gt 0) {
                 Write-Host "$($partname): " -ForegroundColor $OrgCol -NoNewline
                 Write-Host "$($ProdNiceName.'Product name'): " -ForegroundColor $licecol -NoNewline
-                Write-Host "Found $AvaiLice Available/Unused " -ForegroundColor Cyan -NoNewline
-                Write-Host "Licences" -ForegroundColor Yellow
+                Write-Host "Found $AvaiLice Available/Unused Licences" -ForegroundColor Yellow
             }
             If ($ProdNiceName.'Product Name') {
                 $CleanSub = [pscustomobject][ordered]@{
